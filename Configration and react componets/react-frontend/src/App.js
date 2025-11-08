@@ -3,6 +3,8 @@ import './App.css';
 import MyMessage from './Message';
 import { useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
+import UseEffectExample from './UseEffectDemo';
+import {FetchAllGoldDetails,GetAllGoldBasedOnComapny} from './FetchDataExample';
 
 function MySampleComponemt(){
   return(
@@ -27,8 +29,8 @@ function Counter(props){
   const [count, setCount] = useState(props.initalValue);
   return(
     <div className='row container-fluid d-flex justify-content-center text-center mt-5'>
-    <div class="card w-25 bg-success-subtle" >
-  <div class="card-body">
+    <div className="card w-25 bg-success-subtle" >
+  <div className="card-body">
     <h5 class="card-title">Counter App for {props.name}</h5>
     <h3>count:{count}</h3>
       <button onClick={function(){setCount(count+1)}} className='btn btn-outline-warning'>increase count</button>
@@ -51,7 +53,7 @@ function InputApp(){
 
 }
 
-export default function myFunction(){
+export default function MyFunction(){
   return(
     <>
     <MySampleComponemt />
@@ -61,6 +63,15 @@ export default function myFunction(){
     <Counter name="Rishi" initalValue={3}/>
     <Counter name="Ajay" initalValue={7}/>
     <InputApp />
+    <h1>This is a use effect demo</h1>
+    <UseEffectExample />
+    <h1>Rest API Calling</h1>
+    <FetchAllGoldDetails goldId={2} />
+    
+    <FetchAllGoldDetails goldId={4} />
+
+    <GetAllGoldBasedOnComapny companyName="Bhima" />
     </>
+
   );
 }
