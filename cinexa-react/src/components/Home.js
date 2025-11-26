@@ -4,6 +4,7 @@ import { faMasksTheater } from '@fortawesome/free-solid-svg-icons';
 import { faUserTie } from '@fortawesome/free-solid-svg-icons';
 
 
+
 export default function Home() {
     const navigate = useNavigate();
 
@@ -26,8 +27,7 @@ export default function Home() {
 
             </div>
             <div className='m-6 border-r-amber-400 opacity-60'>
-                <marquee behavior="scroll" direction="left" className='flex gap-6  justify-center items-center '>
-                    <div className='flex gap-6 items-center'>
+                    <div className='flex gap-6 items-center justify-center'>
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTTzM7kFNFPQ_uuLXIi_j45pb8JcgunTfjTw&s"
                             alt="Cinema"
                             className='rounded-lg shadow-lg w-40 h-40 flex-shrink-0 object-cover hover:border-amber-400 hover:border-4 hover:animate-pulse' />
@@ -48,10 +48,7 @@ export default function Home() {
                             alt="Cinema"
                             className='rounded-lg shadow-lg w-40 h-40 flex-shrink-0 object-cover hover:border-amber-400 hover:border-4 hover:animate-pulse' />
                     </div>
-                </marquee>
-
-
-
+                
             </div>
 
         </div >
