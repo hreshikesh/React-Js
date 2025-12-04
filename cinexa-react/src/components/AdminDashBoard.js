@@ -29,8 +29,8 @@ const AdminDashBoard = () => {
                     <h2 className="text-2xl font-bold mb-4">Manage Cinema Operations</h2>
                     <p className="text-gray-300">Here you can manage movies, view bookings, and handle other administrative tasks.</p>
                     </div>
-                    <div className='grid grid-cols-2 mt-4 bg-red-950 gap-4 mt-6 p-4 rounded-lg'>
-                        <button className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-full w-full hover:scale-105 transition-all duration-200">Add Movies</button>
+                    <div className='grid grid-cols-2 bg-red-950 gap-4 mt-6 p-4 rounded-lg'>
+                        <button className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-full w-full hover:scale-105 transition-all duration-200" onClick={()=>{navigate('/save-movie')}}>Add Movies</button>
                         <button className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-full w-full hover:scale-105 transition-all duration-200">Update Movie</button>
                     </div>
                 </div>

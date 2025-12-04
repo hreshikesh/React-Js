@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdminDashBoard from './components/AdminDashBoard.js';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AddMovie from './components/AddMovie.js';
 
 
 const App=()=>{
@@ -16,6 +17,7 @@ const App=()=>{
         <Route path='/' element={<Home/>}/>
         <Route path='/admin-login' element={<Admin />}/>
         <Route path='/admin-dashboard' element={<AdminDashBoard />}/>
+        <Route path='/save-movie' element={<AddMovie />}/>
       </Routes>
     </Router>
     </>
