@@ -7,14 +7,12 @@ import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
 
-
-
 const Admin = () => {
     const navigate = useNavigate();
     const [adminEmail, setAdminEmail] = useState('');
     const [otp, setOtp] = useState('');
     const [sendButtonShow, setSendButtonShow] = useState(true);
-    const [timer, setTimer] = useState("");
+    const [timer, setTimer] = useState(0);
 
 
     useEffect(() => {
@@ -40,8 +38,8 @@ const Admin = () => {
         }
         setOtp('');
 
-        axios.post(`http://localhost:8080/api/Admin/sentOtp/${adminEmail}`).
-            then((response) => {
+        axios.post(`http://localhost:8080/api/Admin/sentOtp/${adminEmail}`)
+            .then((response) => {
                 const email = document.getElementById('emailId');
                 email.readOnly = true;
                 setSendButtonShow(false);
@@ -49,7 +47,6 @@ const Admin = () => {
                 otpBlock.classList.remove('hidden');
                 toast.success(response.data);
                 setTimer(30);
-
             }).catch((error) => {
                 if (error.response) {
                     toast.error(error.response.data);
@@ -66,8 +63,8 @@ const Admin = () => {
             toast.error('Please enter the OTP');
             return;
         }
-        axios.post(`http://localhost:8080/api/Admin/verifyotp/${adminEmail}/${otp}`).
-            then((response) => {
+        axios.post(`http://localhost:8080/api/Admin/verifyotp/${adminEmail}/${otp}`)
+           .then((response) => {
                 let timerInterval;
                 let countDown = 5;
                 Swal.fire({
@@ -139,7 +136,7 @@ const Admin = () => {
                                 type="button" onClick={verifyOtp} >Verify OTP</button>
                         </div>
                         <div className='text-center mt-2'>
-                            {timer != 0 && (<p>You can resend otp in {timer}s</p>)}
+                            {timer !== 0 && (<p>You can resend otp in {timer}s</p>)}
                             {timer === 0 && (
                                 <p className="text-sm text-gray-600 mt-3">
                                     Didn’t receive the OTP?
@@ -155,10 +152,6 @@ const Admin = () => {
 
                         </div>
                     </div>
-
-
-
-
 
                 </form >
 

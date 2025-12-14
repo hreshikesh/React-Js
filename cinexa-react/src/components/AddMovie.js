@@ -1,21 +1,27 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Select from "react-select";
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMasksTheater } from '@fortawesome/free-solid-svg-icons';
 
 const AddMovie = () => {
+  const navigate=useNavigate();
   const [step, setStep] = useState(1);
   const [languages, setLanguages] = useState([]);
   const [languageError, setLanguageError] = useState("");
   const [image, setImage] = useState(null);
   const [movie, setMovie] = useState({
     movieName: "",
-    movieLanguage: "",
+    movieLanguage: [],
     movieImage: null,
-    moviePrice: ""
+    moviePrice: 0,
   });
   const [movieNameError, setMovieNameError] = useState("");
   const [movieLanguageError, setMovieLanguageError] = useState("");
   const [fileError, setFileError] = useState("");
   const [moviePriceError, setMoviePriceError] = useState("");
+  const [serverSideError,setServerSideError]=useState([]);
 
 
   const handleInputChange = (event) => {
@@ -26,10 +32,9 @@ const AddMovie = () => {
 
 
 
-
   useEffect(() => {
-    axios.get('http://localhost:8080/api/movie/getAllMoviesLanguages').
-      then(response => {
+    axios.get('http://localhost:8080/api/movie/getAllMoviesLanguages')
+      .then(response => {
         setLanguages(response.data);
         console.log("Languages fetched successfully:", response.data);
       }).catch(error => {
@@ -37,6 +42,15 @@ const AddMovie = () => {
         setLanguageError("Error fetching languages");
       });
   }, []);
+
+
+  const handleLanguageChange = (selectedOptions) => {
+    setMovie(prev => ({
+      ...prev,
+      movieLanguage: selectedOptions.map(opt => opt.value)
+    }));
+  };
+
 
 
   const handleImageChange = (event) => {
@@ -68,14 +82,30 @@ const AddMovie = () => {
   }
 
   function verifyMovieLanguage() {
-    if (!movie.movieLanguage || movie.movieLanguage.trim() === "") {
-      setMovieLanguageError("Please select a movie language.");
+    if (!movie.movieLanguage || movie.movieLanguage.length === 0) {
+      setMovieLanguageError("Please select at least one movie language.");
       return false;
     } else {
       setMovieLanguageError("");
       return true;
     }
   }
+
+
+
+  function verifyMoviePrice() {
+    const price = Number(movie.moviePrice);
+    console.log("Verifying movie price:", price);
+    if (price < 50 || price > 300) {
+      setMoviePriceError("Movie price must be between 50 and 300.");
+      return false;
+    } else {
+      setMoviePriceError("");
+      console.log("Movie price is valid:", price);
+      return true;
+    }
+  }
+
 
   const handleNextStep = () => {
     const isNameValid = verifyMovieName();
@@ -87,20 +117,30 @@ const AddMovie = () => {
     }
   }
 
-  function verifyMoviePrice() {
-    if (movie.moviePrice < 50 || movie.moviePrice > 300) {
-      setMoviePriceError("Price must be between 50 and 300.");
-      return false;
-    } else {
 
-      setMoviePriceError("");
-      return true;
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const isPriceValid = verifyMoviePrice();
+
+    if (!isPriceValid || !image) {
+      return;
+    } else {
+      console.log("Submitting movie:", movie);
     }
-  }
+  };
 
   return (
-    <div className="bg-gray-700 min-h-screen flex items-center justify-center p-6">
-      <div className="w-full max-w-lg bg-orange-950 rounded-2xl shadow-2xl p-6">
+    <div>
+      <nav className="bg-orange-950 p-3 flex justify-between items-center">
+                <h1 className="text-2xl ps-9 font-bold text-yellow-700 almendra-sc-regular "><FontAwesomeIcon icon={faMasksTheater} className="me-2" />Cinexa</h1>
+                <div className='justify-center items-center flex '>
+                    <button className="transition-all ease-in-out duration-300 rounded-full p-2 bg-amber-950 text-yellow-700 hover:scale-110 hover:bg-yellow-700 hover:text-slate-950" onClick={()=>navigate("/admin-dashboard")}>DashBoard</button>
+                </div>
+      </nav>
+    
+    <div className=" bg-gray-900 min-h-screen flex items-center justify-center p-4">
+       
+      <div className="w-full max-w-lg bg-orange-950 rounded-2xl shadow-2xl p-4">
 
         <h1 className="text-white text-3xl font-semibold text-center mb-6">
           Add Movie
@@ -110,7 +150,7 @@ const AddMovie = () => {
           Step {step} of 2
         </h2>
 
-        <form className="space-y-5" encType="multipart/form-data">
+        <form className="space-y-5" encType="multipart/form-data" onSubmit={handleSubmit}>
 
           {step === 1 && (
             <>
@@ -142,27 +182,25 @@ const AddMovie = () => {
                   Language
                 </label>
 
-                <select
+
+                <Select
                   id="movieLanguageId"
                   name="movieLanguage"
-                  value={movie.movieLanguage}
-
-                  onChange={handleInputChange}
+                  options={languages.map((lang) => ({
+                    value: lang.movieLanguage,
+                    label: lang.movieLanguage
+                  }))}
+                  isMulti
+                  onChange={handleLanguageChange}
                   className="w-full p-3 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                  required
-
-                >
-
-
-                  <option value={""} selected >Select Language</option>
-                  {
-                    languages.map((lang) => (
-                      <option key={lang.id} value={lang.movieLanguage}>{lang.movieLanguage}</option>
-                    ))
+                  placeholder="Select Language"
+                  value={
+                    languages
+                      .map(l => ({ value: l.movieLanguage, label: l.movieLanguage }))
+                      .filter(opt => movie.movieLanguage.includes(opt.value))
                   }
-
-
-                </select>
+                  required
+                />
                 {movieLanguageError && <p className="text-red-500">{movieLanguageError}</p>}
                 {languageError && <p className="text-red-500">{languageError}</p>}
               </div>
@@ -199,6 +237,7 @@ const AddMovie = () => {
                   type="file"
                   id="movieImage"
                   name="movieImage"
+                  accept="image/*"
                   className="w-full p-3 rounded-lg bg-gray-100 focus:outline-none"
                   onChange={(e) => {
                     handleImageChange(e);
@@ -222,7 +261,8 @@ const AddMovie = () => {
                   name="moviePrice"
                   value={movie.moviePrice}
                   onChange={handleInputChange}
-                  onInput={verifyMoviePrice}
+                  onBlur={verifyMoviePrice}
+                  placeholder="Enter movie price"
                   className="w-full p-3 rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
                   required
                 />
@@ -232,7 +272,11 @@ const AddMovie = () => {
               <div className="flex gap-4 mt-4">
                 <button
                   type="button"
-                  onClick={() => setStep(1)}
+                  onClick={() => {
+                    setStep(1)
+                    setImage(null);
+                  }
+                  }
                   className="w-1/2 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 rounded-xl transition-all hover:scale-[1.02]"
                 >
                   ← Back
@@ -250,6 +294,7 @@ const AddMovie = () => {
         </form>
 
       </div>
+    </div>
     </div>
   );
 };
