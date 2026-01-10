@@ -4,12 +4,13 @@ import Select from "react-select";
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMasksTheater } from '@fortawesome/free-solid-svg-icons';
+import { toast } from "react-toastify";
 
 const AddMovie = () => {
   const navigate=useNavigate();
   const [step, setStep] = useState(1);
   const [languages, setLanguages] = useState([]);
-  const [languageError, setLanguageError] = useState("");
+  const [languageError, setLanguageError] = useState("");//this error if nomleng in db
   const [image, setImage] = useState(null);
   const [movie, setMovie] = useState({
     movieName: "",
@@ -45,8 +46,8 @@ const AddMovie = () => {
 
 
   const handleLanguageChange = (selectedOptions) => {
-    setMovie(prev => ({
-      ...prev,
+    setMovie(movie => ({
+      ...movie,
       movieLanguage: selectedOptions.map(opt => opt.value)
     }));
   };
@@ -63,6 +64,10 @@ const AddMovie = () => {
         return false;
       } else {
         setFileError("");
+        setMovie(movie => ({
+          ...movie,
+          movieImage: file
+        }));
         setImage(URL.createObjectURL(file));
         return true;
       }
@@ -125,7 +130,39 @@ const AddMovie = () => {
     if (!isPriceValid || !image) {
       return;
     } else {
+      setMovieNameError("");
+      setMoviePriceError("");
+      setFileError("");
+      setLanguageError("");
+
+      const formData = new FormData();
+      formData.append('movieName', movie.movieName);  
+      formData.append('movieLanguage', movie.movieLanguage);
+      formData.append('movieImage', movie.movieImage);
+      formData.append('moviePrice', movie.moviePrice);
+
       console.log("Submitting movie:", movie);
+      axios.post('http://localhost:8080/api/movie/saveMovie', formData, {
+        headers:{
+          'Content-Type':'multipart/form-data'
+        }
+      })
+      .then(response =>{
+        setMovie({
+          movieName: "",
+          movieLanguage: [],
+          movieImage: null,
+          moviePrice: 0,
+        });
+        setImage(null);
+        toast.success("Movie added successfully!");
+        setStep(1);
+      })
+      .catch(error =>{
+        if(error.response && error.response.data){
+          setServerSideError(error.response.data);
+        }
+      });
     }
   };
 
@@ -172,6 +209,7 @@ const AddMovie = () => {
                   required
                 />
                 {movieNameError && <p className="text-red-500">{movieNameError}</p>}
+                {serverSideError.movieName && <p className="text-red-500">{serverSideError.movieName}</p>}
               </div>
 
               <div>
@@ -203,6 +241,7 @@ const AddMovie = () => {
                 />
                 {movieLanguageError && <p className="text-red-500">{movieLanguageError}</p>}
                 {languageError && <p className="text-red-500">{languageError}</p>}
+                {serverSideError.movieLanguage && <p className="text-red-500">{serverSideError.movieLanguage}</p>}
               </div>
               <button
                 type="button"
@@ -241,11 +280,12 @@ const AddMovie = () => {
                   className="w-full p-3 rounded-lg bg-gray-100 focus:outline-none"
                   onChange={(e) => {
                     handleImageChange(e);
-                    handleInputChange(e);
+
                   }}
                   required
                 />
                 {fileError && <p className="text-red-500">{fileError}</p>}
+                {serverSideError.movieImage && <p className="text-red-500">{serverSideError.movieImage}</p>}
               </div>
 
               <div>
@@ -267,6 +307,7 @@ const AddMovie = () => {
                   required
                 />
                 {moviePriceError && <p className="text-red-500">{moviePriceError}</p>}
+                {serverSideError.moviePrice && <p className="text-red-500">{serverSideError.moviePrice}</p>}
               </div>
 
               <div className="flex gap-4 mt-4">

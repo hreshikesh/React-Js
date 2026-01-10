@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 
 
 const Admin = () => {
-    const navigate = useNavigate();
+   
     const [adminEmail, setAdminEmail] = useState('');
     const [otp, setOtp] = useState('');
     const [sendButtonShow, setSendButtonShow] = useState(true);
@@ -106,12 +106,7 @@ const Admin = () => {
 
     return (
         <div className="min-h-screen bg-black">
-            <nav className="bg-orange-950 p-3 flex justify-between items-center">
-                <h1 className="text-2xl ps-9 font-bold text-yellow-700 almendra-sc-regular "><FontAwesomeIcon icon={faMasksTheater} className="me-2" />Cinexa</h1>
-                <div className='justify-center items-center flex '>
-                    <button className="transition-all ease-in-out duration-300 rounded-full p-2 bg-amber-950 text-yellow-700 hover:scale-110 hover:bg-yellow-700 hover:text-slate-950" onClick={() => { navigate('/'); }}>Home</button>
-                </div>
-            </nav>
+            
             <div className="mt-7 text-yellow-700 flex flex-col items-center justify-center">
 
                 <h1 className="text-4xl font-bold mb-8">Admin Login</h1>
