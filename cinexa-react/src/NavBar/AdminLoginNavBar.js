@@ -16,3 +16,5 @@ const AdminLoginNavBar = () => {
         </div>
     )
 }
+
+export default AdminLoginNavBar;
