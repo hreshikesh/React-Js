@@ -14,7 +14,7 @@ const App=()=>{
 
     <Router>
       <Routes>
-        <Route path='/' element={<Home/>}/>
+        <Route path='/' element={<Home/>} />
         <Route path='/admin-login' element={<Admin />}/>
         <Route path='/admin-dashboard' element={<AdminDashBoard />}/>
         <Route path='/save-movie' element={<AddMovie />}/>
