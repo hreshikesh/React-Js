@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import HomePageBody from "../BodyComponents/HomeBody";
 
 
@@ -11,6 +12,7 @@ export default function Home() {
         <div className="min-h-screen bg-black">
            
             <HomePageBody />
+            
 
         </div >
 
