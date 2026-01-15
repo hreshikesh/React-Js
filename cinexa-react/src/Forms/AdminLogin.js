@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { replace, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
@@ -93,7 +93,7 @@ const AdminLoginForm=()=>{
                     }
                 })
                 setTimeout(() => {
-                    navigate('/admin-dashboard');
+                    navigate('/admin-dashboard', { replace: true });
                 }, 5000);
             }).catch((error) => {
                 if (error.response) {
