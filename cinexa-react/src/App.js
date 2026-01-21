@@ -7,6 +7,7 @@ import AddMovie from './components/AddMovie.js';
 import ErrorComponent from './components/ErrorComponent.js';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import { RouterProvider } from 'react-router-dom';
+import AllMovies from './components/AllMovies.js';
 
 const router=createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router=createBrowserRouter([
   { 
     path: '/save-movie',
     element: <AddMovie />
+  },
+  {
+    path:'/all-movies',
+    element:<AllMovies />
   }
    
   
