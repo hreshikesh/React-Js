@@ -27,8 +27,8 @@ const AllMovies = () => {
         <div className="min-h-screen bg-gradient-to-br from-red-950 via-red-900 to-red-950">
             <AddMovieNavBar />
 
-            <div className="max-w-5xl mx-auto mt-24 p-8 bg-slate-500 rounded-2xl shadow-2xl">
-                <h1 className="text-4xl font-bold text-center text-gray-800 uppercase mb-8">
+            <div className="max-w-6xl mx-auto mt-24 p-10 bg-slate-700/30 rounded-3xl shadow-2xl backdrop-blur-md">
+                <h1 className="text-4xl font-extrabold text-center text-white uppercase mb-12 tracking-wide">
                     All Movies
                 </h1>
 
@@ -36,7 +36,7 @@ const AllMovies = () => {
                     <div className="flex justify-center items-center py-20">
                         <svg
                             aria-hidden="true"
-                            className="w-12 h-12 text-gray-300 animate-spin fill-orange-600"
+                            className="w-12 h-12 text-gray-300 animate-spin fill-orange-500"
                             viewBox="0 0 100 101"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
@@ -51,39 +51,70 @@ const AllMovies = () => {
                             />
                         </svg>
                     </div>
-            )}
+                )}
 
                 {error && (
-                    <p className="text-center text-red-600 font-semibold py-6">
+                    <p className="text-center text-red-400 font-semibold py-8 text-lg">
                         Error: {error}
                     </p>
                 )}
 
                 {!loading && !error && (
-                    <div className="grid gap-6 justify-center items-center sm:grid-cols-2 lg:grid-cols-3">
+                    <div className="flex flex-wrap justify-center gap-10 px-4">
                         {movies.map((movie) => (
                             <div
                                 key={movie.id}
-                                className="bg-white rounded-xl shadow-md hover:shadow-xl transition duration-300 p-5 border border-gray-200"
+                                className="group flex flex-col bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 p-6 w-[260px]"
                             >
-                                <h2 className="text-xl font-semibold text-gray-800 mb-2">
+
+                                <div className="w-full h-56 mb-5 flex items-center justify-center bg-black/20 rounded-2xl overflow-hidden">
+                                    <img
+                                        src={
+                                            "http://localhost:8080/api/movie/movieImage/" +
+                                            movie.imageName
+                                        }
+                                        alt={movie.movieName}
+                                        className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                                    />
+                                </div>
+
+                                <h2 className="text-2xl font-semibold text-white text-center mb-3">
                                     {movie.movieName}
                                 </h2>
-                                <p className="text-sm text-gray-500">
-                                    Movie ID: {movie.id}
+
+                                <div className="flex flex-wrap justify-center gap-2 mb-4">
+                                    {movie.movieLanguage.map((lang, idx) => (
+                                        <span
+                                            key={idx}
+                                            className="px-3 py-1 text-xs font-medium rounded-full bg-white/20 text-white backdrop-blur-md"
+                                        >
+                                            {lang}
+                                        </span>
+                                    ))}
+                                </div>
+
+                                <p className="text-center text-lg font-bold text-emerald-400 mb-6">
+                                    {movie.moviePrice}/-
                                 </p>
+
+
+                                <button className="mt-auto w-full py-3 rounded-2xl font-semibold text-white bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 transition-all duration-300 shadow-lg hover:shadow-orange-500/30">
+                                    Book Now
+                                </button>
                             </div>
                         ))}
                     </div>
+
                 )}
-                <div className="flex justify-center items-center gap-6 mt-10 pb-10">
+
+                <div className="flex justify-center items-center gap-6 mt-12 pb-10">
                     <button
                         disabled={page <= 0}
                         onClick={() => {
                             setPage(page - 1);
                             setLoading(true);
                         }}
-                        className="px-6 py-2 rounded-lg font-semibold text-white bg-gray-700 hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                        className="px-6 py-2 rounded-lg font-semibold text-white bg-gray-700 hover:bg-gray-900 disabled:opacity-40 disabled:cursor-not-allowed transition"
                     >
                         Previous
                     </button>
@@ -104,7 +135,6 @@ const AllMovies = () => {
                     </button>
                 </div>
             </div>
-
         </div>
     );
 };
