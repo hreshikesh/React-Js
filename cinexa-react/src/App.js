@@ -8,6 +8,7 @@ import ErrorComponent from './components/ErrorComponent.js';
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 import { RouterProvider } from 'react-router-dom';
 import AllMovies from './components/AllMovies.js';
+import Booking from './components/Booking.js';
 
 const router=createBrowserRouter([
   {
@@ -30,8 +31,11 @@ const router=createBrowserRouter([
   {
     path:'/all-movies',
     element:<AllMovies />
+  },
+  {
+    path:'/booking/:movieId',
+    element:<Booking />
   }
-   
   
 ]);
 
