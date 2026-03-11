@@ -29,11 +29,18 @@ const Booking = () => {
             .catch((err) => setError(err.message));
     }, [movieId]);
 
-    const fetchBookedSeats=()=>{
-        axios.get(`http://localhost:8080/api/booking/getMovieById/getAllBookedSeats/${bookingDate}/${movieId}`)
-        .then((response)=>setFetchedSeats(response.data))
-        .catch((err)=>setError(err.message))
-    }
+    useEffect(()=>{
+        console.log("Fetching booked seats for date:", bookingDate, "and movieId:", movieId);
+        axios.get(`http://localhost:8080/api/booking/getAllBookedSeats/${bookingDate}/${movieId}`)
+        .then((response)=>{
+            setFetchedSeats(response.data)
+            console.log("Booked Seats:", response.data)
+        })
+    
+        .catch((err)=>{setError(err.message)
+            console.error("Error fetching booked seats:", err);
+        })
+    }, [bookingDate, movieId]);
 
 
     const handleSubmit = (e) => {
@@ -56,6 +63,7 @@ const Booking = () => {
     };
 
     const fetchSeats = () => {
+    
         axios.get("http://localhost:8080/api/seat/getSeat")
             .then((res) => setSeats(res.data))
             .catch((err) => setError(err.message));
@@ -83,7 +91,6 @@ const Booking = () => {
         setDateError("");
         setStep(2);
         fetchSeats();
-        fetchBookedSeats();
 
     };
 
@@ -201,9 +208,12 @@ const Booking = () => {
                                             <button
                                                 key={seat.id}
                                                 type="button"
-                                                disabled={selectedSeats.includes(seat.seatName)}
-                                                className={`w-14 h-14 rounded-lg bg-white/20 ${selectedSeats.includes(seat.seatName) ? "disabled:bg-emerald-500 cursor-not-allowed outline-purple-100" : "hover:bg-green-500"} ${seats.includes(fetchedSeat) ? "bg-red-700" :"hover:bg-green-500" } transition`}
-                                                onClick={() => { setSelectedSeats([...selectedSeats, seat.seatName]); setTotalPrice(totalPrice + movieDetails.moviePrice + 50); }}
+                                                disabled={selectedSeats.includes(seat.seatName) || fetchedSeat.includes(seat.seatName)}
+                                                className={`w-14 h-14 rounded-lg bg-white/20 ${selectedSeats.includes(seat.seatName) ? "disabled:bg-emerald-500 cursor-not-allowed outline-purple-100" : "hover:bg-green-500"} ${fetchedSeat.includes(seat.seatName) ? "disabled:bg-red-700" :"hover:bg-green-500" } transition`}
+                                                onClick={() => { 
+                                                    setSelectedSeats([...selectedSeats, seat.seatName]);
+                                                     setTotalPrice(totalPrice + movieDetails.moviePrice + 50);
+                                                     }}
                                             >
                                                 {seat.seatName}
                                             </button>
@@ -220,7 +230,8 @@ const Booking = () => {
                                             <button
                                                 key={seat.id}
                                                 type="button"
-                                                className={`w-14 h-14 rounded-lg bg-white/20 ${selectedSeats.includes(seat.seatName) ? "bg-emerald-500" : "hover:bg-green-500"} ${seats.includes(fetchSeats) ? "bg-red-700" :"hover:bg-green-500" } transition`}
+                                                disabled={selectedSeats.includes(seat.seatName)  || fetchedSeat.includes(seat.seatName)}
+                                                className={`w-14 h-14 rounded-lg bg-white/20 ${selectedSeats.includes(seat.seatName) ? "disabled:bg-emerald-500 cursor-not-allowed outline-purple-100" : "hover:bg-green-500"} ${fetchedSeat.includes(seat.seatName) ? "disabled:bg-red-700" :"hover:bg-green-500" } transition`}
                                                 onClick={() => { 
                                                     setSelectedSeats([...selectedSeats, seat.seatName]); 
                                                     setTotalPrice(totalPrice + movieDetails.moviePrice + 50); 
@@ -242,8 +253,12 @@ const Booking = () => {
                                             <button
                                                 key={seat.id}
                                                 type="button"
-                                                className={`w-14 h-14 rounded-lg bg-white/20 ${selectedSeats.includes(seat.seatName) ? "bg-emerald-500" : "hover:bg-green-500"} transition`}
-                                                onClick={() => { setSelectedSeats([...selectedSeats, seat.seatName]); setTotalPrice(totalPrice + movieDetails.moviePrice + 120); }}
+                                                disabled={selectedSeats.includes(seat.seatName)  || fetchedSeat.includes(seat.seatName)}
+                                                className={`w-14 h-14 rounded-lg bg-white/20 ${selectedSeats.includes(seat.seatName) ? "disabled:bg-emerald-500 cursor-not-allowed outline-purple-100" : "hover:bg-green-500"} ${fetchedSeat.includes(seat.seatName) ? "disabled:bg-red-700" :"hover:bg-green-500" } transition`}
+                                                onClick={() => { 
+                                                    setSelectedSeats([...selectedSeats, seat.seatName]); 
+                                                    setTotalPrice(totalPrice + movieDetails.moviePrice + 120);
+                                                 }}
                                             >
                                                 {seat.seatName}
                                             </button>
