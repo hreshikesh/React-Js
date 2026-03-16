@@ -29,7 +29,7 @@ const Booking = () => {
             .catch((err) => setError(err.message));
     }, [movieId]);
 
-    useEffect(()=>{
+    const fetchBookedSeats = () => {
         console.log("Fetching booked seats for date:", bookingDate, "and movieId:", movieId);
         axios.get(`http://localhost:8080/api/booking/getAllBookedSeats/${bookingDate}/${movieId}`)
         .then((response)=>{
@@ -40,7 +40,7 @@ const Booking = () => {
         .catch((err)=>{setError(err.message)
             console.error("Error fetching booked seats:", err);
         })
-    }, [bookingDate, movieId]);
+    };
 
 
     const handleSubmit = (e) => {
@@ -91,6 +91,7 @@ const Booking = () => {
         setDateError("");
         setStep(2);
         fetchSeats();
+        fetchBookedSeats();
 
     };
 
